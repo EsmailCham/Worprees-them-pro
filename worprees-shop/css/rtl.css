@@ -1,0 +1,499 @@
+/*
+ * RTL Styles for Worprees Shop Theme
+ * 
+ * @package Worprees_Shop
+ */
+
+/* ============================================
+   RESET FOR RTL
+   ============================================ */
+
+html[dir="rtl"],
+html[dir="rtl"] body {
+    direction: rtl;
+    text-align: right;
+}
+
+/* ============================================
+   BASE RTL STYLES
+   ============================================ */
+
+body {
+    direction: rtl;
+    text-align: right;
+    unicode-bidi: embed;
+}
+
+* {
+    direction: inherit;
+}
+
+/* ============================================
+   LAYOUT RTL
+   ============================================ */
+
+.container {
+    direction: rtl;
+}
+
+.row {
+    direction: rtl;
+}
+
+.col {
+    direction: rtl;
+}
+
+/* ============================================
+   HEADER RTL
+   ============================================ */
+
+.header {
+    direction: rtl;
+}
+
+.header-top .container {
+    flex-direction: row-reverse;
+}
+
+.header-top-left {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.header-top-right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.header-main .container {
+    flex-direction: row-reverse;
+}
+
+.site-branding {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.main-navigation {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.nav-menu {
+    flex-direction: row-reverse;
+}
+
+.nav-menu li {
+    margin-left: 0;
+    margin-right: 25px;
+}
+
+.nav-menu .menu-item-has-children > a::after {
+    margin-right: 0;
+    margin-left: 10px;
+}
+
+.sub-menu {
+    left: auto;
+    right: 0;
+}
+
+.header-actions {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+/* ============================================
+   FOOTER RTL
+   ============================================ */
+
+.footer {
+    direction: rtl;
+    text-align: right;
+}
+
+.footer-widgets {
+    direction: rtl;
+}
+
+.footer-bottom .container {
+    flex-direction: row-reverse;
+}
+
+.footer-bottom-left {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.footer-bottom-right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.social-links {
+    flex-direction: row-reverse;
+}
+
+/* ============================================
+   FORMS RTL
+   ============================================ */
+
+input, select, textarea {
+    direction: rtl;
+    text-align: right;
+}
+
+.form-group label {
+    text-align: right;
+}
+
+/* ============================================
+   BUTTONS RTL
+   ============================================ */
+
+.btn {
+    direction: rtl;
+}
+
+/* ============================================
+   CARDS RTL
+   ============================================ */
+
+.card {
+    direction: rtl;
+}
+
+.card-body {
+    direction: rtl;
+}
+
+/* ============================================
+   PRODUCTS RTL
+   ============================================ */
+
+.products-grid {
+    direction: rtl;
+}
+
+.product-card {
+    direction: rtl;
+}
+
+.product-content {
+    direction: rtl;
+}
+
+.product-actions {
+    flex-direction: row-reverse;
+}
+
+/* ============================================
+   BLOG RTL
+   ============================================ */
+
+.blog-grid {
+    direction: rtl;
+}
+
+.blog-card {
+    direction: rtl;
+}
+
+.blog-content {
+    direction: rtl;
+}
+
+.blog-meta {
+    flex-direction: row-reverse;
+}
+
+/* ============================================
+   PAGINATION RTL
+   ============================================ */
+
+.pagination {
+    direction: rtl;
+    flex-direction: row-reverse;
+}
+
+.pagination a,
+.pagination span {
+    direction: rtl;
+}
+
+.pagination .prev {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+.pagination .next {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+/* ============================================
+   NOTIFICATIONS RTL
+   ============================================ */
+
+.notification {
+    direction: rtl;
+    text-align: right;
+    left: auto;
+    right: 20px;
+}
+
+/* ============================================
+   MODALS RTL
+   ============================================ */
+
+.modal {
+    direction: rtl;
+}
+
+.modal-content {
+    direction: rtl;
+    text-align: right;
+}
+
+.modal-close {
+    left: auto;
+    right: 15px;
+}
+
+.modal-body {
+    direction: rtl;
+    text-align: right;
+}
+
+/* ============================================
+   SELECT DROPDOWNS RTL
+   ============================================ */
+
+select {
+    direction: rtl;
+    text-align: right;
+    text-align-last: right;
+    padding-right: 35px;
+    padding-left: 10px;
+    background-position: right 10px center;
+}
+
+/* ============================================
+   WOOCOMMERCE RTL
+   ============================================ */
+
+.woocommerce {
+    direction: rtl;
+    text-align: right;
+}
+
+.woocommerce .products {
+    direction: rtl;
+}
+
+.woocommerce .product {
+    direction: rtl;
+    text-align: right;
+}
+
+.woocommerce-page {
+    direction: rtl;
+    text-align: right;
+}
+
+.woocommerce-cart {
+    direction: rtl;
+    text-align: right;
+}
+
+.woocommerce-cart table.cart {
+    direction: rtl;
+    text-align: right;
+}
+
+.woocommerce-cart table.cart th {
+    direction: rtl;
+    text-align: right;
+}
+
+.woocommerce-cart table.cart td {
+    direction: rtl;
+    text-align: right;
+}
+
+.woocommerce-checkout {
+    direction: rtl;
+    text-align: right;
+}
+
+.woocommerce-checkout .col-1,
+.woocommerce-checkout .col-2 {
+    float: right;
+}
+
+.woocommerce-checkout h3 {
+    direction: rtl;
+    text-align: right;
+}
+
+.woocommerce-checkout .form-row {
+    direction: rtl;
+    text-align: right;
+}
+
+.woocommerce-checkout .form-row label {
+    direction: rtl;
+    text-align: right;
+}
+
+.woocommerce-checkout .form-row input,
+.woocommerce-checkout .form-row select,
+.woocommerce-checkout .form-row textarea {
+    direction: rtl;
+    text-align: right;
+}
+
+/* ============================================
+   RESPONSIVE RTL
+   ============================================ */
+
+@media (max-width: 768px) {
+    .header-main .container {
+        flex-direction: column;
+    }
+    
+    .nav-menu {
+        flex-direction: column;
+    }
+    
+    .nav-menu li {
+        margin: 10px 0;
+    }
+    
+    .sub-menu {
+        position: static;
+        display: none;
+        box-shadow: none;
+        background: transparent;
+    }
+    
+    .nav-menu li:hover > .sub-menu {
+        display: block;
+    }
+    
+    .sub-menu li {
+        margin: 5px 0;
+    }
+    
+    .sub-menu a {
+        padding: 8px 15px;
+        background: var(--primary-color);
+        color: var(--white-color);
+    }
+}
+
+@media (max-width: 576px) {
+    .footer-bottom .container {
+        flex-direction: column;
+    }
+    
+    .footer-menu {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-menu li {
+        margin: 10px 0;
+    }
+}
+
+/* ============================================
+   FINAL RTL TOUCHES
+   ============================================ */
+
+/* Force RTL for all elements */
+* {
+    direction: inherit;
+}
+
+/* Force RTL for form elements */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
+select,
+textarea {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Force RTL for buttons */
+button,
+input[type="submit"],
+input[type="button"],
+input[type="reset"] {
+    direction: rtl;
+}
+
+/* Force RTL for tables */
+table,
+thead,
+tbody,
+tfoot,
+tr,
+th,
+td {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Force RTL for lists */
+ul,
+ol,
+dl,
+menu,
+dir {
+    direction: rtl;
+}
+
+/* Force RTL for list items */
+li,
+dd,
+dt {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Force RTL for headings */
+h1, h2, h3, h4, h5, h6 {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Force RTL for paragraphs */
+p {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Force RTL for links */
+a {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Force RTL for spans */
+span {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Force RTL for divs */
+div {
+    direction: rtl;
+    text-align: right;
+}
