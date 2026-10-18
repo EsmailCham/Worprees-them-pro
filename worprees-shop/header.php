@@ -20,7 +20,10 @@ if (!defined('ABSPATH')) {
     <?php wp_body_open(); ?>
 
     <!-- Preloader - Only show on front-end, not admin or login pages -->
-    <?php if (!is_admin() && !function_exists('wp_login_view')) : ?>
+    <?php 
+    $is_login_page = in_array($GLOBALS['pagenow'], array('wp-login.php', 'login.php'));
+    if (!is_admin() && !$is_login_page && !function_exists('wp_login_view')) : 
+    ?>
     <div class="site-preloader">
         <div class="preloader-content">
             <div class="preloader-spinner"></div>
