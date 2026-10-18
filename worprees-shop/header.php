@@ -19,12 +19,14 @@ if (!defined('ABSPATH')) {
 <body <?php body_class(); ?>>
     <?php wp_body_open(); ?>
 
-    <!-- Preloader -->
+    <!-- Preloader - Only show on front-end, not admin or login pages -->
+    <?php if (!is_admin() && !function_exists('wp_login_view')) : ?>
     <div class="site-preloader">
         <div class="preloader-content">
             <div class="preloader-spinner"></div>
         </div>
     </div>
+    <?php endif; ?>
 
     <!-- Site Header -->
     <header class="site-header">

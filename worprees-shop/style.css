@@ -3,7 +3,7 @@ Theme Name: Worprees Shop
 Theme URI: https://github.com/EsmailCham/Worprees-them-pro
 Author: Esmail Cham
 Author URI: https://github.com/EsmailCham
-Description: قالب وردپرس کاملا فارسی و RTL برای فروشگاه آنلاین با انیمیشن‌های فراوان و مدرن. شامل پشتیبانی کامل WooCommerce، طراحی واکنش‌گرا و انیمیشن‌های CSS3.
+Description: قالب وردپرس کاملا فارسی و RTL برای فروشگاه آنلاین با انیمیشن‌های فراوان و مدرن. شامل پشتیبانی کامل WooCommerce، طراحی واکنش‌گرا و انیمیشن‌های CSS3. کاملا برای زبان فارسی و راست چین بهینه‌سازی شده است.
 Version: 1.0.0
 Text Domain: worprees
 Domain Path: /languages
@@ -16,7 +16,56 @@ Tags: rtl, ecommerce, woocommerce, responsive, modern, animation, Persian, Farsi
 */
 
 /* ============================================
-   IMPORT MAIN STYLES
+   RESET AND BASE STYLES
    ============================================ */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #6c5ce7;
+    --primary-hover: #5649c0;
+    --secondary-color: #00cec9;
+    --accent-color: #fd79a8;
+    --dark-color: #2d3436;
+    --light-color: #f5f6fa;
+    --white-color: #ffffff;
+    --text-color: #2d3436;
+    --text-light: #636e72;
+    --border-color: #dfe6e9;
+    --border-radius: 12px;
+    --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --font-primary: 'Vazirmatn', sans-serif;
+    --font-secondary: 'IranYekan', sans-serif;
+}
+
+html {
+    direction: rtl;
+    text-align: right;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-color);
+    background-color: var(--light-color);
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ============================================
+   IMPORT ADDITIONAL STYLES
+   ============================================ */
+
 @import url("css/style.css");
 @import url("css/rtl.css");

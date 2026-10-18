@@ -7,10 +7,7 @@
    DIRECTION AND TEXT ALIGNMENT
    ============================================ */
 
-html[dir=rtl],
-html[lang|="fa"],
-html[lang|="ar"],
-html[lang|="he"] {
+html {
     direction: rtl;
     text-align: right;
 }
@@ -20,7 +17,7 @@ body {
 }
 
 /* ============================================
-   LAYOUT OVER RIDES
+   LAYOUT OVERRIDES
    ============================================ */
 
 .container {
@@ -50,6 +47,10 @@ body {
     flex-direction: row-reverse;
 }
 
+.header-row {
+    flex-direction: row-reverse;
+}
+
 .main-navigation {
     order: 1;
 }
@@ -66,6 +67,46 @@ body {
 .nav-menu > li > a::after {
     right: 0;
     left: auto;
+}
+
+/* Mobile Menu */
+.mobile-menu-button {
+    order: 2;
+}
+
+/* Header Actions */
+.header-actions {
+    order: 3;
+    flex-direction: row-reverse;
+}
+
+.header-action .action-label {
+    margin-right: 5px;
+    margin-left: 0;
+}
+
+/* Search Form */
+.search-form-container {
+    right: auto;
+    left: 0;
+}
+
+.search-button {
+    order: 1;
+}
+
+.search-form {
+    flex-direction: row-reverse;
+}
+
+.search-field {
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    border-left: none;
+    border-right: 2px solid var(--border-color);
+}
+
+.search-submit {
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
 /* ============================================
@@ -86,6 +127,68 @@ body {
 
 .product-actions button i {
     margin-right: 5px;
+    margin-left: 0;
+}
+
+.product-badge {
+    right: auto;
+    left: 15px;
+}
+
+/* Single Product */
+.single-product-row {
+    direction: rtl;
+}
+
+.single-product-gallery {
+    order: 2;
+}
+
+.single-product-info {
+    order: 1;
+}
+
+.single-product-thumbnails {
+    direction: rtl;
+}
+
+.single-product-variation select {
+    direction: rtl;
+    text-align: right;
+}
+
+.single-product-quantity .quantity-input {
+    text-align: right;
+    padding-right: 10px;
+    padding-left: 5px;
+}
+
+.quantity-minus,
+.quantity-plus {
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.quantity-minus {
+    border-right: none;
+}
+
+.quantity-plus {
+    border-left: none;
+}
+
+.single-product-meta {
+    flex-direction: row-reverse;
+}
+
+.single-product-meta button i {
+    margin-right: 0;
+    margin-left: 8px;
+}
+
+.single-product-sku span:first-child,
+.single-product-categories span:first-child,
+.single-product-tags span:first-child {
+    margin-right: 10px;
     margin-left: 0;
 }
 
@@ -156,6 +259,8 @@ select {
 .woocommerce form .form-row select {
     direction: rtl;
     text-align: right;
+    padding-right: 15px;
+    padding-left: 5px;
 }
 
 .woocommerce table.shop_table {
@@ -177,6 +282,30 @@ select {
     padding-left: 0;
 }
 
+.woocommerce-cart-form__cart-item .product-name {
+    text-align: right;
+}
+
+.woocommerce-cart-form__cart-item .product-price {
+    text-align: right;
+}
+
+.woocommerce-cart-form__cart-item .product-quantity {
+    text-align: right;
+}
+
+.woocommerce-cart-form__cart-item .product-subtotal {
+    text-align: right;
+}
+
+.cart-totals-table th {
+    text-align: right;
+}
+
+.cart-totals-table td {
+    text-align: right;
+}
+
 /* ============================================
    BUTTONS RTL
    ============================================ */
@@ -186,8 +315,18 @@ select {
     margin-left: 0;
 }
 
+.header-action i {
+    margin-right: 0;
+    margin-left: 5px;
+}
+
+.social-share a i {
+    margin-right: 0;
+    margin-left: 0;
+}
+
 /* ============================================
-   ANIMATION DIRECTIONS
+   ANIMATION DIRECTIONS RTL
    ============================================ */
 
 @keyframes slideInRight {
@@ -216,36 +355,73 @@ select {
    RESPONSIVE RTL
    ============================================ */
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .header-main .container {
         flex-direction: column;
     }
     
+    .header-row {
+        flex-direction: column;
+    }
+    
+    .main-navigation {
+        order: 2;
+    }
+    
     .nav-menu {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-direction: column;
     }
     
     .nav-menu > li {
-        margin: 0 10px;
+        margin: 0;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .nav-menu > li > a::after {
+        display: none;
+    }
+    
+    .header-actions {
+        order: 3;
+        flex-direction: row;
+    }
+    
+    .single-product-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-view-row {
+        flex-direction: column;
+    }
+    
+    .quick-view-image {
+        order: 1;
+    }
+    
+    .quick-view-info {
+        order: 2;
     }
 }
 
-/* ============================================
-   UTILITY RTL
-   ============================================ */
-
-.float-right {
-    float: right !important;
-}
-
-.float-left {
-    float: left !important;
-}
-
-.clear-both {
-    clear: both;
+@media (max-width: 768px) {
+    .header-actions {
+        flex-direction: row-reverse;
+    }
+    
+    .newsletter-form {
+        flex-direction: column;
+    }
+    
+    .newsletter-form input {
+        border-radius: var(--border-radius);
+        border-right: 2px solid var(--border-color);
+        text-align: right;
+    }
+    
+    .newsletter-form button {
+        border-radius: var(--border-radius);
+    }
 }
 
 /* ============================================
@@ -290,10 +466,13 @@ select {
     left: auto;
 }
 
-.slick-prev::before,
-.slick-next::before {
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
+.slick-dots {
+    right: auto;
+    left: 50%;
+}
+
+.slick-slide {
+    float: right;
 }
 
 /* ============================================
@@ -301,8 +480,59 @@ select {
    ============================================ */
 
 .modal-close {
-    right: 20px;
-    left: auto;
+    right: auto;
+    left: 20px;
+}
+
+.modal-close i {
+    transform: rotate(0);
+}
+
+.modal-close:hover i {
+    transform: rotate(-90deg);
+}
+
+/* ============================================
+   NOTIFICATIONS RTL
+   ============================================ */
+
+.notification {
+    right: auto;
+    left: 30px;
+}
+
+.notification i {
+    margin-right: 0;
+    margin-left: 8px;
+}
+
+/* ============================================
+   BACK TO TOP RTL
+   ============================================ */
+
+.back-to-top {
+    right: auto;
+    left: 30px;
+}
+
+.back-to-top i {
+    transform: rotate(180deg);
+}
+
+/* ============================================
+   UTILITY RTL
+   ============================================ */
+
+.float-right {
+    float: right !important;
+}
+
+.float-left {
+    float: left !important;
+}
+
+.clear-both {
+    clear: both;
 }
 
 /* ============================================
@@ -312,7 +542,7 @@ select {
 .tooltip .tooltiptext {
     bottom: auto;
     top: 125%;
-    left: 50%;
-    right: auto;
+    right: 50%;
+    left: auto;
     transform: translateX(-50%);
 }

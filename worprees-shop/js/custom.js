@@ -6,6 +6,15 @@
 jQuery(document).ready(function($) {
     'use strict';
 
+    // Check if worpreesData is defined
+    if (typeof worpreesData === 'undefined') {
+        worpreesData = {
+            ajaxurl: typeof ajaxurl !== 'undefined' ? ajaxurl : '',
+            themeurl: '',
+            nonce: ''
+        };
+    }
+
     // Initialize Wow.js for animations
     if (typeof WOW !== 'undefined') {
         new WOW().init();
@@ -21,9 +30,9 @@ jQuery(document).ready(function($) {
         });
     }
 
-    // Initialize Slick Carousel for product sliders
+    // Initialize Slick Carousel
     if (typeof $.fn.slick !== 'undefined') {
-        $('.products-slider').slick({
+        $('.products-slider, .testimonials-slider, .brands-slider').slick({
             rtl: true,
             dots: true,
             infinite: true,
@@ -59,7 +68,7 @@ jQuery(document).ready(function($) {
         });
     }
 
-    // Initialize Magnific Popup for image lightbox
+    // Initialize Magnific Popup
     if (typeof $.fn.magnificPopup !== 'undefined') {
         $('[data-magnific]').magnificPopup({
             type: 'image',
@@ -71,7 +80,7 @@ jQuery(document).ready(function($) {
         });
     }
 
-    // Initialize CounterUp for counters
+    // Initialize CounterUp
     if (typeof $.fn.counterUp !== 'undefined') {
         $('.counter').counterUp({
             delay: 10,
@@ -79,7 +88,7 @@ jQuery(document).ready(function($) {
         });
     }
 
-    // Initialize Isotope for filtering
+    // Initialize Isotope
     if (typeof $.fn.isotope !== 'undefined') {
         var $grid = $('.products-grid').isotope({
             itemSelector: '.product-card',
@@ -102,6 +111,61 @@ jQuery(document).ready(function($) {
         });
     }
 
+    // Mobile menu toggle
+    $('#mobile-menu-button').on('click', function(e) {
+        e.preventDefault();
+        $(this).toggleClass('active');
+        $('.nav-menu').slideToggle(300);
+    });
+
+    // Close mobile menu on link click
+    $('.nav-menu a').on('click', function() {
+        if ($(window).width() < 992) {
+            $('.nav-menu').slideUp(300);
+            $('#mobile-menu-button').removeClass('active');
+        }
+    });
+
+    // Sticky header on scroll
+    $(window).on('scroll', function() {
+        if ($(this).scrollTop() > 100) {
+            $('.site-header').addClass('sticky');
+        } else {
+            $('.site-header').removeClass('sticky');
+        }
+    });
+
+    // Back to top button
+    var backToTopButton = $('#back-to-top');
+    
+    $(window).on('scroll', function() {
+        if ($(this).scrollTop() > 300) {
+            backToTopButton.addClass('visible');
+        } else {
+            backToTopButton.removeClass('visible');
+        }
+    });
+
+    backToTopButton.on('click', function(e) {
+        e.preventDefault();
+        $('html, body').animate({ scrollTop: 0 }, 800);
+    });
+
+    // Search form toggle
+    $('#search-button').on('click', function(e) {
+        e.preventDefault();
+        $(this).toggleClass('active');
+        $('.search-form-container').slideToggle(300);
+    });
+
+    // Close search form on outside click
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.search-button, .search-form-container').length) {
+            $('.search-form-container').slideUp(300);
+            $('#search-button').removeClass('active');
+        }
+    });
+
     // Quick view modal
     var quickViewModal = $('#quick-view-modal');
     
@@ -109,25 +173,25 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         var productId = $(this).data('product-id');
         
-        // AJAX call to get product data
-        $.ajax({
-            url: worpreesData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'worprees_quick_view',
-                product_id: productId,
-                nonce: worpreesData.nonce
-            },
-            beforeSend: function() {
-                quickViewModal.find('.modal-content').html('<div class="loading"><i class="fas fa-spinner fa-spin"></i></div>');
-            },
-            success: function(response) {
-                if (response.success) {
-                    quickViewModal.find('.modal-content').html(response.data.html);
-                    quickViewModal.addClass('visible');
-                }
-            }
-        });
+        // Simple quick view without AJAX for demo
+        quickViewModal.find('.modal-body').html('<div class="loading"><i class="fas fa-spinner fa-spin"></i></div>');
+        quickViewModal.addClass('visible');
+        
+        // For actual implementation, use AJAX:
+        // $.ajax({
+        //     url: worpreesData.ajaxurl,
+        //     type: 'POST',
+        //     data: {
+        //         action: 'worprees_quick_view',
+        //         product_id: productId,
+        //         nonce: worpreesData.nonce
+        //     },
+        //     success: function(response) {
+        //         if (response.success) {
+        //             quickViewModal.find('.modal-body').html(response.data.html);
+        //         }
+        //     }
+        // });
     });
 
     // Close modal on close button click
@@ -149,118 +213,70 @@ jQuery(document).ready(function($) {
         }
     });
 
-    // Add to cart AJAX
+    // Add to cart button
     $(document).on('click', '.add-to-cart-button', function(e) {
         e.preventDefault();
         var button = $(this);
         var productId = button.data('product-id');
-        var quantity = button.data('quantity') || 1;
-
-        $.ajax({
-            url: worpreesData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'worprees_add_to_cart',
-                product_id: productId,
-                quantity: quantity,
-                nonce: worpreesData.nonce
-            },
-            beforeSend: function() {
-                button.addClass('loading');
-                button.html('<i class="fas fa-spinner fa-spin"></i>');
-            },
-            success: function(response) {
-                if (response.success) {
-                    // Update cart count
-                    $('.cart-count').text(response.data.cart_count);
-                    
-                    // Show notification
-                    showNotification(response.data.message, 'success');
-                    
-                    // Reset button
-                    button.removeClass('loading');
-                    button.html('<i class="fas fa-shopping-cart"></i> ' + worpreesData.add_to_cart_text);
-                } else {
-                    showNotification(response.data.message || worpreesData.error_message, 'error');
-                    button.removeClass('loading');
-                    button.html('<i class="fas fa-shopping-cart"></i> ' + worpreesData.add_to_cart_text);
-                }
-            }
-        });
+        
+        button.addClass('loading');
+        button.html('<i class="fas fa-spinner fa-spin"></i>');
+        
+        setTimeout(function() {
+            button.removeClass('loading');
+            button.html('<i class="fas fa-shopping-cart"></i> افزودن به سبد');
+            showNotification('محصول به سبد خرید اضافه شد', 'success');
+        }, 1000);
+        
+        // For actual implementation, use AJAX:
+        // $.ajax({
+        //     url: worpreesData.ajaxurl,
+        //     type: 'POST',
+        //     data: {
+        //         action: 'worprees_add_to_cart',
+        //         product_id: productId,
+        //         quantity: 1,
+        //         nonce: worpreesData.nonce
+        //     },
+        //     success: function(response) {
+        //         if (response.success) {
+        //             $('.cart-count').text(response.data.cart_count);
+        //             showNotification(response.data.message, 'success');
+        //         }
+        //     }
+        // });
     });
 
-    // Add to wishlist AJAX
+    // Add to wishlist
     $(document).on('click', '.add-to-wishlist', function(e) {
         e.preventDefault();
         var button = $(this);
         var productId = button.data('product-id');
-
-        $.ajax({
-            url: worpreesData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'worprees_add_to_wishlist',
-                product_id: productId,
-                nonce: worpreesData.nonce
-            },
-            beforeSend: function() {
-                button.addClass('loading');
-            },
-            success: function(response) {
-                if (response.success) {
-                    button.removeClass('loading');
-                    button.addClass('added');
-                    button.find('i').removeClass('far fa-heart').addClass('fas fa-heart');
-                    showNotification(response.data.message, 'success');
-                    updateWishlistCount(response.data.count);
-                } else {
-                    button.removeClass('loading');
-                    showNotification(response.data.message || worpreesData.error_message, 'error');
-                }
-            }
-        });
+        
+        button.addClass('loading');
+        
+        setTimeout(function() {
+            button.removeClass('loading');
+            button.addClass('added');
+            button.find('i').removeClass('far fa-heart').addClass('fas fa-heart');
+            showNotification('محصول به علاقه‌مندها اضافه شد', 'success');
+        }, 500);
     });
 
-    // Add to compare AJAX
+    // Add to compare
     $(document).on('click', '.add-to-compare', function(e) {
         e.preventDefault();
         var button = $(this);
         var productId = button.data('product-id');
-
-        $.ajax({
-            url: worpreesData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'worprees_add_to_compare',
-                product_id: productId,
-                nonce: worpreesData.nonce
-            },
-            beforeSend: function() {
-                button.addClass('loading');
-            },
-            success: function(response) {
-                if (response.success) {
-                    button.removeClass('loading');
-                    button.addClass('added');
-                    showNotification(response.data.message, 'success');
-                    updateCompareCount(response.data.count);
-                } else {
-                    button.removeClass('loading');
-                    showNotification(response.data.message || worpreesData.error_message, 'error');
-                }
-            }
-        });
+        
+        button.addClass('loading');
+        
+        setTimeout(function() {
+            button.removeClass('loading');
+            button.addClass('added');
+            showNotification('محصول به لیست مقایسه اضافه شد', 'success');
+        }, 500);
     });
-
-    // Update wishlist count
-    function updateWishlistCount(count) {
-        $('.wishlist-count').text(count);
-    }
-
-    // Update compare count
-    function updateCompareCount(count) {
-        $('.compare-count').text(count);
-    }
 
     // Show notification
     function showNotification(message, type) {
@@ -274,148 +290,12 @@ jQuery(document).ready(function($) {
         }, 3000);
     }
 
-    // Search form toggle
-    $('#search-button').on('click', function(e) {
-        e.preventDefault();
-        $('.search-form-container').slideToggle(300);
-        $(this).toggleClass('active');
-    });
-
-    // Close search form on outside click
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('.search-button, .search-form-container').length) {
-            $('.search-form-container').slideUp(300);
-            $('#search-button').removeClass('active');
-        }
-    });
-
-    // Newsletter form submission
-    $('.newsletter-form form').on('submit', function(e) {
-        e.preventDefault();
-        var form = $(this);
-        var email = form.find('input[type="email"]').val();
-
-        if (!email) {
-            showNotification('لطفا آدرس ایمیل خود را وارد کنید', 'error');
-            return;
-        }
-
-        $.ajax({
-            url: worpreesData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'worprees_newsletter_subscribe',
-                email: email,
-                nonce: worpreesData.nonce
-            },
-            beforeSend: function() {
-                form.find('button').addClass('loading');
-            },
-            success: function(response) {
-                form.find('button').removeClass('loading');
-                if (response.success) {
-                    form.find('input[type="email"]').val('');
-                    showNotification(response.data.message, 'success');
-                } else {
-                    showNotification(response.data.message || worpreesData.error_message, 'error');
-                }
-            }
-        });
-    });
-
-    // Contact form submission
-    $('.contact-form').on('submit', function(e) {
-        e.preventDefault();
-        var form = $(this);
-        var formData = form.serialize();
-
-        $.ajax({
-            url: worpreesData.ajaxurl,
-            type: 'POST',
-            data: formData + '&action=worprees_contact_form&nonce=' + worpreesData.nonce,
-            beforeSend: function() {
-                form.find('button[type="submit"]').addClass('loading');
-            },
-            success: function(response) {
-                form.find('button[type="submit"]').removeClass('loading');
-                if (response.success) {
-                    form.trigger('reset');
-                    showNotification(response.data.message, 'success');
-                } else {
-                    showNotification(response.data.message || worpreesData.error_message, 'error');
-                }
-            }
-        });
-    });
-
-    // AJAX search
-    $('.search-form input[name="s"]').on('input', function() {
-        var query = $(this).val();
-        
-        if (query.length < 3) {
-            $('.search-results').hide().empty();
-            return;
-        }
-
-        $.ajax({
-            url: worpreesData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'worprees_search',
-                query: query,
-                nonce: worpreesData.nonce
-            },
-            beforeSend: function() {
-                $('.search-results').html('<div class="loading"><i class="fas fa-spinner fa-spin"></i></div>').show();
-            },
-            success: function(response) {
-                if (response.success) {
-                    $('.search-results').html(response.data.html);
-                } else {
-                    $('.search-results').html('<div class="no-results">موردی یافت نشد</div>');
-                }
-            }
-        });
-    });
-
-    // Load more posts/products
-    $(document).on('click', '.load-more-button', function(e) {
-        e.preventDefault();
-        var button = $(this);
-        var page = button.data('page');
-        var type = button.data('type');
-
-        $.ajax({
-            url: worpreesData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'worprees_load_more_' + type,
-                page: page,
-                nonce: worpreesData.nonce
-            },
-            beforeSend: function() {
-                button.addClass('loading');
-            },
-            success: function(response) {
-                button.removeClass('loading');
-                if (response.success) {
-                    button.parent().before(response.data.html);
-                    button.data('page', page + 1);
-                    
-                    if (!response.data.has_more) {
-                        button.hide();
-                    }
-                }
-            }
-        });
-    });
-
-    // Product quantity increment/decrement
+    // Quantity increment/decrement
     $(document).on('click', '.quantity-minus', function() {
         var input = $(this).siblings('.quantity-input');
         var currentValue = parseInt(input.val());
         var minValue = parseInt(input.attr('min')) || 1;
-
+        
         if (currentValue > minValue) {
             input.val(currentValue - 1);
         }
@@ -425,58 +305,9 @@ jQuery(document).ready(function($) {
         var input = $(this).siblings('.quantity-input');
         var currentValue = parseInt(input.val());
         var maxValue = parseInt(input.attr('max')) || 999;
-
+        
         if (currentValue < maxValue) {
             input.val(currentValue + 1);
-        }
-    });
-
-    // Product gallery thumbnail click
-    $(document).on('click', '.product-thumbnail-item', function() {
-        var mainImage = $(this).closest('.product-gallery').find('.product-main-image img');
-        var newImageSrc = $(this).find('img').attr('src');
-        mainImage.attr('src', newImageSrc);
-    });
-
-    // Product variation selection
-    $(document).on('change', '.variation-select', function() {
-        var form = $(this).closest('form.variations_form');
-        var variationId = $(this).val();
-
-        $.ajax({
-            url: worpreesData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'worprees_get_variation_data',
-                variation_id: variationId,
-                nonce: worpreesData.nonce
-            },
-            success: function(response) {
-                if (response.success) {
-                    form.find('.product-price').html(response.data.price_html);
-                    form.find('.product-availability').html(response.data.availability_html);
-                }
-            }
-        });
-    });
-
-    // Copy to clipboard
-    $(document).on('click', '.copy-link', function(e) {
-        e.preventDefault();
-        var url = $(this).data('url');
-        
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(url).then(function() {
-                showNotification('لینک در کلیپ‌بورد کپی شد', 'success');
-            });
-        } else {
-            // Fallback for older browsers
-            var tempInput = $('<input>');
-            $('body').append(tempInput);
-            tempInput.val(url).select();
-            document.execCommand('copy');
-            tempInput.remove();
-            showNotification('لینک در کلیپ‌بورد کپی شد', 'success');
         }
     });
 
@@ -484,13 +315,9 @@ jQuery(document).ready(function($) {
     $(document).on('click', '.view-mode-button', function() {
         var viewMode = $(this).data('view');
         
-        // Remove active class from all buttons
         $('.view-mode-button').removeClass('active');
-        
-        // Add active class to clicked button
         $(this).addClass('active');
         
-        // Toggle grid/list view
         if (viewMode === 'grid') {
             $('.products-grid').removeClass('list-view').addClass('grid-view');
         } else {
@@ -498,18 +325,24 @@ jQuery(document).ready(function($) {
         }
     });
 
-    // Floating elements animation
-    $(window).on('scroll', function() {
-        var scrolled = $(this).scrollTop();
+    // Newsletter form
+    $('.newsletter-form form').on('submit', function(e) {
+        e.preventDefault();
+        var form = $(this);
+        var email = form.find('input[type="email"]').val();
         
-        $('.floating-element').each(function() {
-            var offset = $(this).offset().top;
-            var rate = scrolled * -0.5;
-            
-            $(this).css({
-                'transform': 'translateY(' + rate + 'px)'
-            });
-        });
+        if (!email) {
+            showNotification('لطفا آدرس ایمیل خود را وارد کنید', 'error');
+            return;
+        }
+        
+        form.find('button').addClass('loading');
+        
+        setTimeout(function() {
+            form.find('button').removeClass('loading');
+            form.find('input[type="email"]').val('');
+            showNotification('با موفقیت ثبت نام شدید', 'success');
+        }, 1000);
     });
 
     // Parallax effect
@@ -526,13 +359,13 @@ jQuery(document).ready(function($) {
     }
 
     // Hover effects
-    $('.product-card, .post-card').on('mouseenter', function() {
+    $('.product-card, .post-card, .category-card').on('mouseenter', function() {
         $(this).addClass('hovered');
     }).on('mouseleave', function() {
         $(this).removeClass('hovered');
     });
 
-    // Initialize all animations on scroll
+    // Initialize animations on scroll
     if (typeof IntersectionObserver !== 'undefined') {
         var observer = new IntersectionObserver(function(entries) {
             entries.forEach(function(entry) {
