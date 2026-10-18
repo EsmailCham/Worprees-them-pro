@@ -194,7 +194,12 @@ if (class_exists('WooCommerce')) {
 
 // Load theme files
 require_once WORPREES_SHOP_DIR . '/inc/theme-functions.php';
-require_once WORPREES_SHOP_DIR . '/inc/template-tags.php';
+
+// Check if template-tags.php exists before loading
+$template_tags_path = WORPREES_SHOP_DIR . '/inc/template-tags.php';
+if (file_exists($template_tags_path)) {
+    require_once $template_tags_path;
+}
 
 // Check if WooCommerce is active
 if (!function_exists('worprees_shop_is_woocommerce_active')) :
