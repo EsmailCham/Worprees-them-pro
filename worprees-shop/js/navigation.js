@@ -1,39 +1,48 @@
 /**
- * Navigation JavaScript
- * 
- * @package Worprees_Shop
+ * Worprees Shop Navigation JS
+ * Handles mobile menu toggle functionality
  */
 
-(function($) {
+jQuery(document).ready(function($) {
     'use strict';
-    
-    $(document).ready(function() {
-        // Mobile menu toggle
-        $('.menu-toggle').on('click', function(e) {
-            e.preventDefault();
-            var $menu = $('#primary-menu');
-            var $button = $(this);
-            var expanded = $button.attr('aria-expanded') === 'true' || false;
-            
-            $button.attr('aria-expanded', !expanded);
-            $menu.toggleClass('active');
-        });
-        
-        // Close mobile menu when clicking outside
-        $(document).on('click', function(e) {
-            if (!$(e.target).closest('.main-navigation').length && !$(e.target).is('.menu-toggle')) {
-                $('#primary-menu').removeClass('active');
-                $('.menu-toggle').attr('aria-expanded', 'false');
-            }
-        });
-        
-        // Close mobile menu with Escape key
-        $(document).on('keydown', function(e) {
-            if (e.key === 'Escape') {
-                $('#primary-menu').removeClass('active');
-                $('.menu-toggle').attr('aria-expanded', 'false');
-            }
-        });
+
+    // Mobile menu toggle
+    $('#mobile-menu-button').on('click', function(e) {
+        e.preventDefault();
+        $('.nav-menu').slideToggle(300);
+        $(this).toggleClass('active');
     });
+
+    // Mobile menu close on link click
+    $('.nav-menu a').on('click', function() {
+        if ($(window).width() < 768) {
+            $('.nav-menu').slideUp(300);
+            $('#mobile-menu-button').removeClass('active');
+        }
+    });
+
+    // Sticky header on scroll
+    $(window).on('scroll', function() {
+        if ($(this).scrollTop() > 100) {
+            $('.site-header').addClass('sticky');
+        } else {
+            $('.site-header').removeClass('sticky');
+        }
+    });
+
+    // Back to top button
+    var backToTopButton = $('#back-to-top');
     
-})(jQuery);
+    $(window).on('scroll', function() {
+        if ($(this).scrollTop() > 300) {
+            backToTopButton.addClass('visible');
+        } else {
+            backToTopButton.removeClass('visible');
+        }
+    });
+
+    backToTopButton.on('click', function(e) {
+        e.preventDefault();
+        $('html, body').animate({ scrollTop: 0 }, 800);
+    });
+});

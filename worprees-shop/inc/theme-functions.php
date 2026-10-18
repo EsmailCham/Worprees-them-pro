@@ -1,7 +1,7 @@
 <?php
 /**
- * Worprees Theme Functions
- * Theme utilities, breadcrumbs, reading time, related posts, helpers
+ * Worprees Shop Theme Functions
+ * Utility functions for the theme
  */
 
 if (!defined('ABSPATH')) {
@@ -13,8 +13,7 @@ if (!defined('ABSPATH')) {
  */
 if (!function_exists('worprees_get_option')) {
     function worprees_get_option($key, $default = '') {
-        $options = get_option('worprees_theme_options', array());
-        return isset($options[$key]) ? $options[$key] : $default;
+        return get_theme_mod('worprees_' . $key, $default);
     }
 }
 
@@ -150,7 +149,7 @@ if (!function_exists('worprees_reading_time')) {
         
         $content = $post->post_content;
         $content = strip_tags($content);
-        $content = str_replace(array(' ', '\n', '\r', '\t'), ' ', $content);
+        $content = str_replace(array(' ', "\n", "\r", "\t"), ' ', $content);
         $content = trim($content);
         
         $word_count = str_word_count($content);
@@ -272,7 +271,7 @@ if (!function_exists('worprees_track_post_views')) {
 }
 
 /**
- * Get social share links
+ * Social share links
  */
 if (!function_exists('worprees_social_share')) {
     function worprees_social_share($post_id = null) {
@@ -329,7 +328,7 @@ if (!function_exists('worprees_social_share')) {
 }
 
 /**
- * Get pagination
+ * Pagination
  */
 if (!function_exists('worprees_pagination')) {
     function worprees_pagination($query = null) {
@@ -377,7 +376,7 @@ if (!function_exists('worprees_excerpt')) {
         $excerpt = $post->post_excerpt ? $post->post_excerpt : $post->post_content;
         $excerpt = strip_shortcodes($excerpt);
         $excerpt = strip_tags($excerpt);
-        $excerpt = str_replace(array(' ', '\n', '\r', '\t'), ' ', $excerpt);
+        $excerpt = str_replace(array(' ', "\n", "\r", "\t"), ' ', $excerpt);
         $excerpt = trim($excerpt);
         
         if (strlen($excerpt) > $length) {
@@ -401,50 +400,16 @@ if (!function_exists('worprees_featured_image_url')) {
 }
 
 /**
- * Get first image from content
+ * Check if WooCommerce is active
  */
-if (!function_exists('worprees_first_image')) {
-    function worprees_first_image($content = null, $size = 'full') {
-        $post = get_post();
-        $content = $content ? $content : $post->post_content;
-        
-        preg_match('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $content, $matches);
-        
-        if (isset($matches[1])) {
-            return $matches[1];
-        }
-        
-        return '';
+if (!function_exists('worprees_is_woocommerce_active')) {
+    function worprees_is_woocommerce_active() {
+        return class_exists('WooCommerce');
     }
 }
 
 /**
- * Check if current page is WooCommerce page
- */
-if (!function_exists('worprees_is_woocommerce_page')) {
-    function worprees_is_woocommerce_page() {
-        if (function_exists('is_woocommerce') && is_woocommerce()) {
-            return true;
-        }
-        
-        if (function_exists('is_cart') && is_cart()) {
-            return true;
-        }
-        
-        if (function_exists('is_checkout') && is_checkout()) {
-            return true;
-        }
-        
-        if (function_exists('is_account_page') && is_account_page()) {
-            return true;
-        }
-        
-        return false;
-    }
-}
-
-/**
- * Get theme logo
+ * Theme logo
  */
 if (!function_exists('worprees_logo')) {
     function worprees_logo($echo = true) {
@@ -463,391 +428,4 @@ if (!function_exists('worprees_logo')) {
         
         return $html;
     }
-}
-
-/**
- * Get theme favicon
- */
-if (!function_exists('worprees_favicon')) {
-    function worprees_favicon() {
-        $favicon = get_theme_mod('worprees_favicon');
-        if ($favicon) {
-            echo '<link rel="icon" type="image/png" href="' . esc_url($favicon) . '">';
-        }
-    }
-    add_action('wp_head', 'worprees_favicon');
-}
-
-/**
- * Get theme preloader
- */
-if (!function_exists('worprees_preloader')) {
-    function worprees_preloader() {
-        $preloader = worprees_get_option('preloader', '1');
-        if ($preloader) {
-            echo '<div class="worprees-preloader"><div class="worprees-preloader-content"><div class="worprees-preloader-spinner"></div></div></div>';
-        }
-    }
-    add_action('wp_body_open', 'worprees_preloader');
-}
-
-/**
- * Get back to top button
- */
-if (!function_exists('worprees_back_to_top')) {
-    function worprees_back_to_top() {
-        $back_to_top = worprees_get_option('back_to_top', '1');
-        if ($back_to_top) {
-            echo '<button class="worprees-back-to-top" id="worpreesBackToTop"><i class="fas fa-chevron-up"></i></button>';
-        }
-    }
-    add_action('wp_footer', 'worprees_back_to_top');
-}
-
-/**
- * Get scroll to top script
- */
-if (!function_exists('worprees_scroll_to_top_script')) {
-    function worprees_scroll_to_top_script() {
-        echo '<script>jQuery(document).ready(function($){$(window).scroll(function(){if($(this).scrollTop()>100){$("#worpreesBackToTop").fadeIn();}else{$("#worpreesBackToTop").fadeOut();}});$("#worpreesBackToTop").click(function(){$("html,body").animate({scrollTop:0},800);return false;});});</script>';
-    }
-    add_action('wp_footer', 'worprees_scroll_to_top_script');
-}
-
-/**
- * Get theme version
- */
-if (!function_exists('worprees_theme_version')) {
-    function worprees_theme_version() {
-        $theme = wp_get_theme();
-        return $theme->get('Version');
-    }
-}
-
-/**
- * Get theme author
- */
-if (!function_exists('worprees_theme_author')) {
-    function worprees_theme_author() {
-        $theme = wp_get_theme();
-        return $theme->get('Author');
-    }
-}
-
-/**
- * Get theme description
- */
-if (!function_exists('worprees_theme_description')) {
-    function worprees_theme_description() {
-        $theme = wp_get_theme();
-        return $theme->get('Description');
-    }
-}
-
-/**
- * Get theme tags
- */
-if (!function_exists('worprees_theme_tags')) {
-    function worprees_theme_tags() {
-        $theme = wp_get_theme();
-        return $theme->get('Tags');
-    }
-}
-
-/**
- * Get theme screenshot URL
- */
-if (!function_exists('worprees_theme_screenshot')) {
-    function worprees_theme_screenshot() {
-        $theme = wp_get_theme();
-        return $theme->get_screenshot();
-    }
-}
-
-/**
- * Enqueue theme styles
- */
-if (!function_exists('worprees_enqueue_styles')) {
-    function worprees_enqueue_styles() {
-        // Main style
-        wp_enqueue_style('worprees-style', get_stylesheet_uri(), array(), worprees_theme_version());
-        
-        // RTL style
-        if (is_rtl()) {
-            wp_enqueue_style('worprees-rtl', get_template_directory_uri() . '/css/rtl.css', array('worprees-style'), worprees_theme_version());
-        }
-        
-        // Google Fonts
-        wp_enqueue_style('worprees-google-fonts', 'https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap', array(), null);
-        
-        // Font Awesome
-        wp_enqueue_style('worprees-font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css', array(), '6.4.0');
-        
-        // Animate.css
-        wp_enqueue_style('worprees-animate', 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css', array(), '4.1.1');
-        
-        // Slick Carousel
-        wp_enqueue_style('worprees-slick', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css', array(), '1.8.1');
-        
-        // Magnific Popup
-        wp_enqueue_style('worprees-magnific', 'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css', array(), '1.1.0');
-        
-        // AOS
-        wp_enqueue_style('worprees-aos', 'https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css', array(), '2.3.4');
-    }
-    add_action('wp_enqueue_scripts', 'worprees_enqueue_styles');
-}
-
-/**
- * Enqueue theme scripts
- */
-if (!function_exists('worprees_enqueue_scripts')) {
-    function worprees_enqueue_scripts() {
-        // jQuery
-        wp_enqueue_script('jquery');
-        
-        // jQuery Migrate
-        wp_enqueue_script('jquery-migrate', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.4.1/jquery-migrate.min.js', array('jquery'), '3.4.1', true);
-        
-        // Wow.js
-        wp_enqueue_script('worprees-wow', 'https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js', array('jquery'), '1.1.2', true);
-        
-        // AOS
-        wp_enqueue_script('worprees-aos', 'https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js', array('jquery'), '2.3.4', true);
-        
-        // Slick Carousel
-        wp_enqueue_script('worprees-slick', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js', array('jquery'), '1.8.1', true);
-        
-        // Magnific Popup
-        wp_enqueue_script('worprees-magnific', 'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js', array('jquery'), '1.1.0', true);
-        
-        // Waypoints
-        wp_enqueue_script('worprees-waypoints', 'https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js', array('jquery'), '4.0.1', true);
-        
-        // CounterUp
-        wp_enqueue_script('worprees-counterup', 'https://cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0.0/jquery.counterup.min.js', array('jquery', 'worprees-waypoints'), '1.0.0', true);
-        
-        // Isotope
-        wp_enqueue_script('worprees-isotope', 'https://cdnjs.cloudflare.com/ajax/libs/isotope/3.0.6/isotope.pkgd.min.js', array('jquery'), '3.0.6', true);
-        
-        // Custom scripts
-        wp_enqueue_script('worprees-custom', get_template_directory_uri() . '/js/custom.js', array('jquery'), worprees_theme_version(), true);
-        
-        // Navigation
-        wp_enqueue_script('worprees-navigation', get_template_directory_uri() . '/js/navigation.js', array('jquery'), worprees_theme_version(), true);
-        
-        // Skip link focus fix
-        wp_enqueue_script('worprees-skip-link', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), worprees_theme_version(), true);
-        
-        // Localize script
-        wp_localize_script('worprees-custom', 'worprees', array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('worprees_nonce'),
-            'theme_url' => get_template_directory_uri(),
-        ));
-    }
-    add_action('wp_enqueue_scripts', 'worprees_enqueue_scripts');
-}
-
-/**
- * Register widget areas
- */
-if (!function_exists('worprees_widgets_init')) {
-    function worprees_widgets_init() {
-        register_sidebar(array(
-            'name' => esc_html__('نوار کناری', 'worprees'),
-            'id' => 'sidebar',
-            'description' => esc_html__('ابزارک های نوار کناری', 'worprees'),
-            'before_widget' => '<div id="%1$s" class="widget %2$s">',
-            'after_widget' => '</div>',
-            'before_title' => '<h3 class="widget-title">',
-            'after_title' => '</h3>',
-        ));
-        
-        register_sidebar(array(
-            'name' => esc_html__('فوتر 1', 'worprees'),
-            'id' => 'footer-1',
-            'description' => esc_html__('ابزارک های فوتر ستون اول', 'worprees'),
-            'before_widget' => '<div id="%1$s" class="widget %2$s">',
-            'after_widget' => '</div>',
-            'before_title' => '<h3 class="widget-title">',
-            'after_title' => '</h3>',
-        ));
-        
-        register_sidebar(array(
-            'name' => esc_html__('فوتر 2', 'worprees'),
-            'id' => 'footer-2',
-            'description' => esc_html__('ابزارک های فوتر ستون دوم', 'worprees'),
-            'before_widget' => '<div id="%1$s" class="widget %2$s">',
-            'after_widget' => '</div>',
-            'before_title' => '<h3 class="widget-title">',
-            'after_title' => '</h3>',
-        ));
-        
-        register_sidebar(array(
-            'name' => esc_html__('فوتر 3', 'worprees'),
-            'id' => 'footer-3',
-            'description' => esc_html__('ابزارک های فوتر ستون سوم', 'worprees'),
-            'before_widget' => '<div id="%1$s" class="widget %2$s">',
-            'after_widget' => '</div>',
-            'before_title' => '<h3 class="widget-title">',
-            'after_title' => '</h3>',
-        ));
-        
-        register_sidebar(array(
-            'name' => esc_html__('فوتر 4', 'worprees'),
-            'id' => 'footer-4',
-            'description' => esc_html__('ابزارک های فوتر ستون چهارم', 'worprees'),
-            'before_widget' => '<div id="%1$s" class="widget %2$s">',
-            'after_widget' => '</div>',
-            'before_title' => '<h3 class="widget-title">',
-            'after_title' => '</h3>',
-        ));
-        
-        register_sidebar(array(
-            'name' => esc_html__('نوار کناری فروشگاه', 'worprees'),
-            'id' => 'shop-sidebar',
-            'description' => esc_html__('ابزارک های نوار کناری فروشگاه', 'worprees'),
-            'before_widget' => '<div id="%1$s" class="widget %2$s">',
-            'after_widget' => '</div>',
-            'before_title' => '<h3 class="widget-title">',
-            'after_title' => '</h3>',
-        ));
-    }
-    add_action('widgets_init', 'worprees_widgets_init');
-}
-
-/**
- * Theme setup
- */
-if (!function_exists('worprees_setup')) {
-    function worprees_setup() {
-        // Text domain
-        load_theme_textdomain('worprees', get_template_directory() . '/languages');
-        
-        // Title tag
-        add_theme_support('title-tag');
-        
-        // Post thumbnails
-        add_theme_support('post-thumbnails');
-        
-        // Custom logo
-        add_theme_support('custom-logo', array(
-            'height' => 100,
-            'width' => 300,
-            'flex-height' => true,
-            'flex-width' => true,
-        ));
-        
-        // HTML5 support
-        add_theme_support('html5', array(
-            'search-form',
-            'comment-form',
-            'comment-list',
-            'gallery',
-            'caption',
-            'script',
-            'style',
-        ));
-        
-        // Post formats
-        add_theme_support('post-formats', array(
-            'aside',
-            'image',
-            'video',
-            'quote',
-            'link',
-            'gallery',
-            'audio',
-        ));
-        
-        // Automatic feed links
-        add_theme_support('automatic-feed-links');
-        
-        // Custom background
-        add_theme_support('custom-background', array(
-            'default-color' => 'ffffff',
-        ));
-        
-        // Custom header
-        add_theme_support('custom-header', array(
-            'default-image' => '',
-            'default-text-color' => '000000',
-            'width' => 1920,
-            'height' => 400,
-            'flex-height' => true,
-            'flex-width' => true,
-        ));
-        
-        // WooCommerce support
-        add_theme_support('woocommerce');
-        
-        // Editor styles
-        add_theme_support('editor-styles');
-        
-        // Align wide
-        add_theme_support('align-wide');
-        
-        // Responsive embeds
-        add_theme_support('responsive-embeds');
-        
-        // Register navigation menus
-        register_nav_menus(array(
-            'primary' => esc_html__('منوی اصلی', 'worprees'),
-            'topbar' => esc_html__('منوی بالای سربرگ', 'worprees'),
-            'mobile' => esc_html__('منوی موبایل', 'worprees'),
-            'footer' => esc_html__('منوی فوتر', 'worprees'),
-        ));
-        
-        // Image sizes
-        add_image_size('worprees-thumbnail', 300, 200, true);
-        add_image_size('worprees-medium', 600, 400, true);
-        add_image_size('worprees-large', 1200, 800, true);
-        add_image_size('worprees-hero', 1920, 800, true);
-        add_image_size('worprees-product', 400, 400, true);
-        
-        // Body open hook
-        add_action('wp_body_open', 'worprees_preloader');
-    }
-    add_action('after_setup_theme', 'worprees_setup');
-}
-
-/**
- * Theme activation
- */
-if (!function_exists('worprees_activation')) {
-    function worprees_activation() {
-        // Set default options
-        $default_options = array(
-            'preloader' => '1',
-            'back_to_top' => '1',
-            'sticky_header' => '1',
-            'dark_mode' => '0',
-            'rtl' => '1',
-        );
-        
-        update_option('worprees_theme_options', $default_options);
-        
-        // Flush rewrite rules
-        flush_rewrite_rules();
-        
-        // Set front page
-        $front_page = get_page_by_title('خانه');
-        if ($front_page) {
-            update_option('show_on_front', 'page');
-            update_option('page_on_front', $front_page->ID);
-        }
-    }
-    register_activation_hook(__FILE__, 'worprees_activation');
-}
-
-/**
- * Theme deactivation
- */
-if (!function_exists('worprees_deactivation')) {
-    function worprees_deactivation() {
-        // Flush rewrite rules
-        flush_rewrite_rules();
-    }
-    register_deactivation_hook(__FILE__, 'worprees_deactivation');
 }

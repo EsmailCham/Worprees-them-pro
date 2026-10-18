@@ -1,55 +1,29 @@
 /**
- * Skip Link Focus Fix
- * 
- * @package Worprees_Shop
+ * Worprees Shop Skip Link Focus Fix
+ * Handles accessibility skip link focus management
  */
 
-(function() {
+jQuery(document).ready(function($) {
     'use strict';
-    
-    // This is a namespaced function
-    var skipLinkFocus = {
-        init: function() {
-            // Add an event listener to the window object
-            window.addEventListener('hashchange', this.handleHashChange);
-            
-            // Also run on page load
-            this.handleHashChange();
-        },
-        
-        handleHashChange: function() {
-            // Get the hash from the URL
-            var hash = window.location.hash;
-            
-            // If there's a hash, find the element and set focus
-            if (hash) {
-                var element = document.querySelector(hash);
-                if (element) {
-                    // Set tabindex if it doesn't exist
-                    if (!element.hasAttribute('tabindex')) {
-                        element.setAttribute('tabindex', '-1');
-                    }
-                    
-                    // Set focus
-                    element.focus();
-                    
-                    // Scroll to element
-                    element.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+
+    // Skip link focus fix for accessibility
+    var is_webkit = navigator.userAgent.toLowerCase().indexOf('webkit') > -1;
+    var is_opera = navigator.userAgent.toLowerCase().indexOf('opera') > -1;
+    var is_ie = navigator.userAgent.toLowerCase().indexOf('msie') > -1;
+
+    if ((is_webkit || is_opera || is_ie) && document.getElementById && window.addEventListener) {
+        window.addEventListener('hashchange', function() {
+            var id = location.hash.substring(1);
+            if (!/^[A-z0-9_-]+$/.test(id)) {
+                return;
             }
-        }
-    };
-    
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            skipLinkFocus.init();
-        });
-    } else {
-        skipLinkFocus.init();
+            var element = document.getElementById(id);
+            if (element) {
+                if (!/^(?:a|select|input|button|textarea)$/i.test(element.tagName)) {
+                    element.tabIndex = -1;
+                }
+                element.focus();
+            }
+        }, false);
     }
-    
-})();
+});
